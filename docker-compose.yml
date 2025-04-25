@@ -1,0 +1,23 @@
+services:
+  express:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: express
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/app/src
+      - ./index.js:/app/index.js
+      - .env:/app/.env
+  mongodb:
+    build:
+      context: .
+      dockerfile: Dockerfile-mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodbdata:/data/db
+volumes:
+  mongodbdata:
