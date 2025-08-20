@@ -4,12 +4,12 @@ const cloudinary = require('cloudinary').v2;
 
 const docsController = {
     uploadFile: expressAsyncHandler(async (req, res) => {
-        const { title, office, description, } = req.body;
+        const { title, office, description,status } = req.body;
         const file = req.file?.path;
         const user = req.user;
         const fileType = req.file?.mimetype;
 
-        console.log(req.file);
+        //console.log(req.file);
 
         const result = new docModel({
             title,
@@ -18,12 +18,13 @@ const docsController = {
             uploadBy: user._id,
             fileType,
             location: file,
+            status,
         });
         const newFile = await result.save();
         res.status(201).json({ message: 'File uploaded successfully', doc: newFile });
     }),
     getAllFiles: expressAsyncHandler(async (req, res) => {
-        const files = await docModel.find({}).populate('uploadBy', 'username email');
+        const files = await docModel.find({status: 'public'}).populate('uploadBy', 'username email');
         res.status(200).json(files);
     }),
     getFileById: expressAsyncHandler(async (req, res) => {
@@ -47,6 +48,7 @@ const docsController = {
     updateFile: expressAsyncHandler(async (req, res) => {
         const { title, office, description } = req.body;
         const file = req.file?.path;
+        console.log(file);
         const user = req.user;
         const fileType = req.file?.mimetype;
         const fileID = await docModel.findById(req.params.id);
@@ -70,10 +72,11 @@ const docsController = {
     }),
     toggleFavorite: expressAsyncHandler(async (req, res) => {
         const file = await docModel.findById(req.params.id);
-        if (!file) {
-            return res.status(404).json({ message: 'File not found' });
+        if (file.isFavorite) {
+            file.isFavorite = false;
+        }else{
+            file.isFavorite = true;
         }
-        file.isFavorite = !file.isFavorite;
         await file.save();
         res.status(200).json({ message: 'File favorite status updated', doc: file });
     }),

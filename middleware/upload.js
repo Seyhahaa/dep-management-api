@@ -10,17 +10,28 @@ const cloudinary = require('cloudinary').v2;
         api_key: '434344429477951', 
         api_secret: 'fhAWqkaBgq8T0g4YeLrBl7RQ1f8' // Click 'View API Keys' above to copy your API secret
     });
-    const storage = new CloudinaryStorage({
+    const CloudStorage = new CloudinaryStorage({
       cloudinary: cloudinary,
       params: {
         folder: 'uploads',
-        allowed_formats: ['jpg', 'jpeg', 'png', 'gif']
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif','pdf']
         // You can add more parameters like:
         // transformation: [{ width: 500, height: 500, crop: 'limit' }]
       }
     });
-const upload = multer({ storage: storage });
+    const storage = multer.diskStorage({
+      destination: "./uploads",
+      filename: function (req, file, cb) {
+        cb(
+          null,
+          file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+        );
+      },
+    });
+
+const CloudUpload = multer({storage: CloudStorage});
+const upload = multer({storage: CloudStorage});
 
     
     
-module.exports = { upload};
+module.exports = { upload,CloudUpload};
