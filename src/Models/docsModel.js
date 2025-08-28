@@ -9,7 +9,8 @@ const docSchema = new mongoose.Schema({
     description: { type: String,},
     fileType: { type: String, required: true },
     isFavorite: { type: Boolean, default: false },
-});
+    thumbnail: { type: String}
+},{ timestamps: true });
 
 const docModel = mongoose.model("Docs", docSchema)
 

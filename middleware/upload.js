@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('cloudinary').v2;
@@ -19,19 +17,18 @@ const cloudinary = require('cloudinary').v2;
         // transformation: [{ width: 500, height: 500, crop: 'limit' }]
       }
     });
-    const storage = multer.diskStorage({
-      destination: "./uploads",
-      filename: function (req, file, cb) {
-        cb(
-          null,
-          file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-        );
-      },
-    });
+    // const storage = multer.diskStorage({
+    //   destination: "./uploads",
+    //   filename: function (req, file, cb) {
+    //     cb(
+    //       null,
+    //       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    //     );
+    //   },
+    // });
 
-const CloudUpload = multer({storage: CloudStorage});
 const upload = multer({storage: CloudStorage});
 
     
     
-module.exports = { upload,CloudUpload};
+module.exports = { upload};

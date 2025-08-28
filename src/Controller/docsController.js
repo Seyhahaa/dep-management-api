@@ -24,7 +24,10 @@ const docsController = {
         res.status(201).json({ message: 'File uploaded successfully', doc: newFile });
     }),
     getAllFiles: expressAsyncHandler(async (req, res) => {
-        const files = await docModel.find({status: 'public'}).populate('uploadBy', 'username email');
+        const files = await docModel.find({
+            status: 'public',
+        }).sort("-createdAt")
+            .populate('uploadBy', 'username email');
         res.status(200).json(files);
     }),
     getFileById: expressAsyncHandler(async (req, res) => {

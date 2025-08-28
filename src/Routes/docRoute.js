@@ -3,7 +3,7 @@ const multer = require('multer');
 const docRouter = express.Router();
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
-const { upload,CloudUpload } = require('../../middleware/upload');
+const { upload } = require('../../middleware/upload');
 const docsController = require('../Controller/docsController');
 
 const { verifyJWT } = require('../../middleware/index');
